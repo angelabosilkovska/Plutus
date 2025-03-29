@@ -1,18 +1,33 @@
 package com.compose.plutus.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.Composable
+import androidx.compose.material.Colors
 
 @Composable
-fun PlutusTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colors = ColorPalette, typography = Typography, content = content)
+fun PlutusTheme(
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colors = remember { getPlatformColorScheme(useDarkTheme) }
+
+    MaterialTheme(
+        colors = colors,
+        typography = typography,
+        shapes = shapes,
+        content = content
+    )
 }
+
+expect fun getPlatformColorScheme(useDarkTheme: Boolean): Colors
 
 @Composable
 fun DialogThemeOverlay(content: @Composable () -> Unit) {
