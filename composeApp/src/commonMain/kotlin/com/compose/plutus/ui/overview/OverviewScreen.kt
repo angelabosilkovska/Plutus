@@ -36,6 +36,7 @@ import com.compose.plutus.data.UserData
 import com.compose.plutus.ui.components.AccountRow
 import com.compose.plutus.ui.components.PlutusAlertDialog
 import com.compose.plutus.ui.components.BillRow
+import com.compose.plutus.ui.components.NativeButton
 import com.compose.plutus.ui.components.PlutusDivider
 import com.compose.plutus.ui.components.formatAmount
 import org.jetbrains.compose.resources.stringResource
@@ -111,16 +112,11 @@ private fun AlertHeader(onClickSeeAll: () -> Unit) {
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
-        TextButton(
+        NativeButton(
+            label = "SEE ALL",
             onClick = onClickSeeAll,
-            contentPadding = PaddingValues(0.dp),
             modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            Text(
-                text = "SEE ALL",
-                style = MaterialTheme.typography.button,
-            )
-        }
+        )
     }
 }
 
