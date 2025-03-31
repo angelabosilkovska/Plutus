@@ -17,7 +17,7 @@ fun PlutusTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = remember { getPlatformColorScheme(useDarkTheme) }
+    val colors = getPlatformColorScheme(useDarkTheme)
 
     MaterialTheme(
         colors = colors,
