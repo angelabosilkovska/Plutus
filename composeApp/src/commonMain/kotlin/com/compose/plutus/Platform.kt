@@ -5,6 +5,3 @@ interface Platform {
 }
 
 expect fun getPlatform(): Platform
-
-expect fun formatAmountNumber(value: Float): String
-expect fun formatAccountNumber(value: Int): String

@@ -25,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
-import com.compose.plutus.formatAccountNumber
-import com.compose.plutus.formatAmountNumber
+import com.compose.plutus.util.formatAccountNumber
+import com.compose.plutus.util.formatAmountNumber
 import org.jetbrains.compose.resources.stringResource
 import plutus.composeapp.generated.resources.Res
 import plutus.composeapp.generated.resources.account_redacted
@@ -137,12 +137,8 @@ fun PlutusDivider(modifier: Modifier = Modifier) {
 }
 
 fun formatAmount(amount: Float): String {
-//    return AmountDecimalFormat.format(amount)
     return formatAmountNumber(amount)
 }
-
-//private val AccountDecimalFormat = DecimalFormat("####")
-//private val AmountDecimalFormat = DecimalFormat("#,###.##")
 
 fun <E> List<E>.extractProportions(selector: (E) -> Float): List<Float> {
     val total = this.sumOf { selector(it).toDouble() }
