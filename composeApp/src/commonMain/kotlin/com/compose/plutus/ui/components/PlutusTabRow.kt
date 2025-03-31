@@ -35,14 +35,15 @@ import com.compose.plutus.Destination
 fun PlutusTabRow(
     allScreens: List<Destination>,
     onTabSelected: (Destination) -> Unit,
-    currentScreen: Destination
+    currentScreen: Destination,
+    modifier: Modifier
 ) {
     Surface(
-        Modifier
+        modifier
             .height(TabHeight)
             .fillMaxWidth()
     ) {
-        Row(Modifier.selectableGroup()) {
+        Row(modifier.selectableGroup()) {
             allScreens.forEach { screen ->
                 RallyTab(
                     text = screen.route,

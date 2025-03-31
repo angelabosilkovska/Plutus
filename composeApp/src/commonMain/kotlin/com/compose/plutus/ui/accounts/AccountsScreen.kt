@@ -1,11 +1,13 @@
 package com.compose.plutus.ui.accounts
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.compose.plutus.data.UserData
 import com.compose.plutus.ui.components.AccountRow
 import com.compose.plutus.ui.components.StatementBody
@@ -19,7 +21,10 @@ fun AccountsScreen(
 ) {
     val amountsTotal = remember { UserData.accounts.map { account -> account.balance }.sum() }
     StatementBody(
-        modifier = Modifier.semantics { contentDescription = "Accounts Screen" },
+        modifier = Modifier
+            .semantics { contentDescription = "Accounts Screen" }
+            .padding(16.dp, 8.dp)
+        ,
         items = UserData.accounts,
         amounts = { account -> account.balance },
         colors = { account -> account.color },
@@ -45,6 +50,7 @@ fun SingleAccountScreen(
 ) {
     val account = remember(accountType) { UserData.getAccount(accountType) }
     StatementBody(
+        modifier = Modifier.padding(16.dp, 8.dp),
         items = listOf(account),
         colors = { account.color },
         amounts = { account.balance },

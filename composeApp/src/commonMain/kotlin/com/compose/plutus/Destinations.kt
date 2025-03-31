@@ -41,5 +41,15 @@ data object SingleAccount : Destination {
     )
 }
 
+data object SingleBill : Destination {
+    override val icon = Icons.Filled.Money
+    override val route = "single_bill"
+    const val billTypeArg = "bill_type"
+    val routeWithArgs = "$route/{$billTypeArg}"
+    val arguments = listOf(
+        navArgument(billTypeArg) { type = NavType.StringType }
+    )
+}
+
 // Screens to be displayed in the top TabRow
 val tabRowScreens = listOf(Overview, Accounts, Bills)

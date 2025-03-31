@@ -49,10 +49,11 @@ fun OverviewScreen(
     onClickSeeAllAccounts: () -> Unit = {},
     onClickSeeAllBills: () -> Unit = {},
     onAccountClick: (String) -> Unit = {},
+    onBillClick: (String) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(16.dp, 8.dp)
             .verticalScroll(rememberScrollState())
             .semantics { contentDescription = "Overview Screen" }
     ) {
@@ -64,7 +65,8 @@ fun OverviewScreen(
         )
         Spacer(Modifier.height(DefaultPadding))
         BillsCard(
-            onClickSeeAll = onClickSeeAllBills
+            onClickSeeAll = onClickSeeAllBills,
+            onBillClick = onBillClick
         )
     }
 }
@@ -219,7 +221,7 @@ private fun AccountsCard(onClickSeeAll: () -> Unit, onAccountClick: (String) -> 
 }
 
 @Composable
-private fun BillsCard(onClickSeeAll: () -> Unit) {
+private fun BillsCard(onClickSeeAll: () -> Unit, onBillClick: (String) -> Unit) {
     val amount = UserData.bills.map { bill -> bill.amount }.sum()
     OverviewScreenCard(
         title = stringResource(Res.string.bills),
@@ -230,6 +232,7 @@ private fun BillsCard(onClickSeeAll: () -> Unit) {
         values = { it.amount }
     ) { bill ->
         BillRow(
+            modifier = Modifier.clickable { onBillClick(bill.name) },
             name = bill.name,
             due = bill.due,
             amount = bill.amount,
