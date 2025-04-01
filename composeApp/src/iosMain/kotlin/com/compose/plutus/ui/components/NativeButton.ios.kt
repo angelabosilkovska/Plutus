@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitViewController
 import com.compose.plutus.LocalNativeViewFactory
@@ -12,7 +13,9 @@ import com.compose.plutus.LocalNativeViewFactory
 actual fun NativeButton(
     label: String,
     onClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    backgroundColor: Color,
+    textColor: Color,
 ) {
     val factory = LocalNativeViewFactory.current
     UIKitViewController(
