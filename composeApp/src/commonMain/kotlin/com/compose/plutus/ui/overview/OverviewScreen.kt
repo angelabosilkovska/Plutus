@@ -38,9 +38,11 @@ import com.compose.plutus.ui.components.BillRow
 import com.compose.plutus.ui.components.NativeButton
 import com.compose.plutus.ui.components.PlutusDivider
 import com.compose.plutus.ui.components.formatAmount
+import com.compose.plutus.util.toComposeColor
 import org.jetbrains.compose.resources.stringResource
 import plutus.composeapp.generated.resources.Res
 import plutus.composeapp.generated.resources.accounts
+import plutus.composeapp.generated.resources.alerts
 import plutus.composeapp.generated.resources.bills
 import plutus.composeapp.generated.resources.see_all
 
@@ -50,6 +52,7 @@ fun OverviewScreen(
     onClickSeeAllBills: () -> Unit = {},
     onAccountClick: (String) -> Unit = {},
     onBillClick: (String) -> Unit = {},
+    userData: UserData
 ) {
     Column(
         modifier = Modifier
@@ -61,12 +64,14 @@ fun OverviewScreen(
         Spacer(Modifier.height(DefaultPadding))
         AccountsCard(
             onClickSeeAll = onClickSeeAllAccounts,
-            onAccountClick = onAccountClick
+            onAccountClick = onAccountClick,
+            userData = userData
         )
         Spacer(Modifier.height(DefaultPadding))
         BillsCard(
             onClickSeeAll = onClickSeeAllBills,
-            onBillClick = onBillClick
+            onBillClick = onBillClick,
+            userData = userData
         )
     }
 }
@@ -107,12 +112,12 @@ private fun AlertHeader(onClickSeeAll: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Alerts",
+            text = stringResource(Res.string.alerts),
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
         NativeButton(
-            label = "SEE ALL",
+            label = stringResource(Res.string.see_all),
             onClick = onClickSeeAll,
             modifier = Modifier.align(Alignment.CenterVertically),
             backgroundColor = MaterialTheme.colors.primary,
@@ -197,14 +202,18 @@ private fun <T> OverViewDivider(
 }
 
 @Composable
-private fun AccountsCard(onClickSeeAll: () -> Unit, onAccountClick: (String) -> Unit) {
-    val amount = UserData.accounts.map { account -> account.balance }.sum()
+private fun AccountsCard(
+    onClickSeeAll: () -> Unit,
+    onAccountClick: (String) -> Unit,
+    userData: UserData
+) {
+    val amount = userData.accounts.map { account -> account.balance }.sum()
     OverviewScreenCard(
         title = stringResource(Res.string.accounts),
         amount = amount,
         onClickSeeAll = onClickSeeAll,
-        data = UserData.accounts,
-        colors = { it.color },
+        data = userData.accounts,
+        colors = { it.color.toComposeColor() },
         values = { it.balance }
     ) { account ->
         AccountRow(
@@ -212,20 +221,24 @@ private fun AccountsCard(onClickSeeAll: () -> Unit, onAccountClick: (String) -> 
             name = account.name,
             number = account.number,
             amount = account.balance,
-            color = account.color
+            color = account.color.toComposeColor()
         )
     }
 }
 
 @Composable
-private fun BillsCard(onClickSeeAll: () -> Unit, onBillClick: (String) -> Unit) {
-    val amount = UserData.bills.map { bill -> bill.amount }.sum()
+private fun BillsCard(
+    onClickSeeAll: () -> Unit,
+    onBillClick: (String) -> Unit,
+    userData: UserData
+) {
+    val amount = userData.bills.map { bill -> bill.amount }.sum()
     OverviewScreenCard(
         title = stringResource(Res.string.bills),
         amount = amount,
         onClickSeeAll = onClickSeeAll,
-        data = UserData.bills,
-        colors = { it.color },
+        data = userData.bills,
+        colors = { it.color.toComposeColor() },
         values = { it.amount }
     ) { bill ->
         BillRow(
@@ -233,7 +246,7 @@ private fun BillsCard(onClickSeeAll: () -> Unit, onBillClick: (String) -> Unit) 
             name = bill.name,
             due = bill.due,
             amount = bill.amount,
-            color = bill.color
+            color = bill.color.toComposeColor()
         )
     }
 }

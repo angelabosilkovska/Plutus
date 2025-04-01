@@ -6,6 +6,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.compose.plutus.data.UserData
 import com.compose.plutus.ui.accounts.AccountsScreen
 import com.compose.plutus.ui.accounts.SingleAccountScreen
 import com.compose.plutus.ui.bills.BillsScreen
@@ -15,7 +16,8 @@ import com.compose.plutus.ui.overview.OverviewScreen
 @Composable
 fun PlutusNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userData: UserData
 ) {
     NavHost(
         navController = navController,
@@ -35,21 +37,24 @@ fun PlutusNavHost(
                 },
                 onBillClick = { billType ->
                     navController.navigateToSingleBill(billType)
-                }
+                },
+                userData = userData
             )
         }
         composable(route = Accounts.route) {
             AccountsScreen(
                 onAccountClick = { accountType ->
                     navController.navigateToSingleAccount(accountType)
-                }
+                },
+                userData = userData
             )
         }
         composable(route = Bills.route) {
             BillsScreen(
                 onBillClick = { billType ->
                     navController.navigateToSingleBill(billType)
-                }
+                },
+                userData
             )
         }
         composable(
@@ -57,14 +62,17 @@ fun PlutusNavHost(
             arguments = SingleAccount.arguments
         ) { navBackStackEntry ->
             val accountType = navBackStackEntry.arguments?.getString(SingleAccount.accountTypeArg)
-            SingleAccountScreen(accountType)
+            SingleAccountScreen(accountType, userData)
         }
         composable(
             route = SingleBill.routeWithArgs,
             arguments = SingleBill.arguments
         ) { navBackStackEntry ->
             val billType = navBackStackEntry.arguments?.getString(SingleBill.billTypeArg)
-            SingleBillScreen(billType)
+            SingleBillScreen(
+                billType,
+                userData
+            )
         }
     }
 }

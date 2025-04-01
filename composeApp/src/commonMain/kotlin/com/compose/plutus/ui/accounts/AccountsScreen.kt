@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.compose.plutus.data.UserData
 import com.compose.plutus.ui.components.AccountRow
 import com.compose.plutus.ui.components.StatementBody
+import com.compose.plutus.util.toComposeColor
 import org.jetbrains.compose.resources.stringResource
 import plutus.composeapp.generated.resources.Res
 import plutus.composeapp.generated.resources.total
@@ -18,16 +19,17 @@ import plutus.composeapp.generated.resources.total
 @Composable
 fun AccountsScreen(
     onAccountClick: (String) -> Unit = {},
+    userData: UserData
 ) {
-    val amountsTotal = remember { UserData.accounts.map { account -> account.balance }.sum() }
+    val amountsTotal = remember { userData.accounts.map { account -> account.balance }.sum() }
     StatementBody(
         modifier = Modifier
             .semantics { contentDescription = "Accounts Screen" }
             .padding(16.dp, 8.dp)
         ,
-        items = UserData.accounts,
+        items = userData.accounts,
         amounts = { account -> account.balance },
-        colors = { account -> account.color },
+        colors = { account -> account.color.toComposeColor() },
         amountsTotal = amountsTotal,
         circleLabel = stringResource(Res.string.total),
         rows = { account ->
@@ -38,7 +40,7 @@ fun AccountsScreen(
                 name = account.name,
                 number = account.number,
                 amount = account.balance,
-                color = account.color
+                color = account.color.toComposeColor()
             )
         }
     )
@@ -46,13 +48,14 @@ fun AccountsScreen(
 
 @Composable
 fun SingleAccountScreen(
-    accountType: String? = UserData.accounts.first().name
+    accountType: String?,
+    userData: UserData
 ) {
-    val account = remember(accountType) { UserData.getAccount(accountType) }
+    val account = remember(accountType) { userData.getAccount(accountType) }
     StatementBody(
         modifier = Modifier.padding(16.dp, 8.dp),
         items = listOf(account),
-        colors = { account.color },
+        colors = { account.color.toComposeColor() },
         amounts = { account.balance },
         amountsTotal = account.balance,
         circleLabel = account.name,
@@ -61,7 +64,7 @@ fun SingleAccountScreen(
             name = row.name,
             number = row.number,
             amount = row.balance,
-            color = row.color
+            color = row.color.toComposeColor()
         )
     }
 }

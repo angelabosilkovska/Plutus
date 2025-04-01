@@ -8,14 +8,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.compose.plutus.data.UserData
+import com.compose.plutus.data.accounts
+import com.compose.plutus.data.bills
+import com.compose.plutus.network.UserDataClient
 import com.compose.plutus.ui.theme.PlutusTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.compose.plutus.ui.components.PlutusTabRow
+import com.compose.plutus.util.Result
 
 @Composable
-@Preview
-fun App() {
+fun App(client: UserDataClient?) {
     PlutusTheme {
+        val data = getUserData(client)
         val navController = rememberNavController()
         val currentScreen = getCurrentScreen(navController)
 
@@ -33,7 +37,8 @@ fun App() {
         ) { innerPadding ->
             PlutusNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                userData = data
             )
         }
     }
@@ -55,4 +60,19 @@ fun getCurrentScreen(navController: NavHostController): Destination {
 
 fun extractPrefix(input: String?): String? {
     return input?.substringBefore("/")
+}
+
+@Composable
+fun getUserData(client: UserDataClient?): UserData {
+    return if (client == null) {
+        UserData(accounts, bills)
+    } else {
+        val viewModel: AppViewModel = remember { AppViewModel(client) }
+        val userDataState by viewModel.userData.collectAsState()
+        if (userDataState is Result.Success) {
+            (userDataState as Result.Success<UserData>).data
+        } else {
+            UserData(accounts, bills)
+        }
+    }
 }

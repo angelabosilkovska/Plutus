@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
-import com.compose.plutus.data.Bill
 import com.compose.plutus.data.UserData
 import com.compose.plutus.ui.components.BillRow
 import com.compose.plutus.ui.components.StatementBody
+import com.compose.plutus.util.toComposeColor
 import org.jetbrains.compose.resources.stringResource
 import plutus.composeapp.generated.resources.Res
 import plutus.composeapp.generated.resources.due
@@ -19,16 +19,16 @@ import plutus.composeapp.generated.resources.due
 @Composable
 fun BillsScreen(
     onBillClick: (String) -> Unit = {},
-    bills: List<Bill> = remember { UserData.bills },
+    userData: UserData,
 ) {
     StatementBody(
         modifier = Modifier
             .clearAndSetSemantics { contentDescription = "Bills" }
             .padding(16.dp, 8.dp),
-        items = bills,
+        items = userData.bills,
         amounts = { bill -> bill.amount },
-        colors = { bill -> bill.color },
-        amountsTotal = bills.map { bill -> bill.amount }.sum(),
+        colors = { bill -> bill.color.toComposeColor() },
+        amountsTotal = userData.bills.map { bill -> bill.amount }.sum(),
         circleLabel = stringResource(Res.string.due),
         rows = { bill ->
             BillRow(
@@ -37,7 +37,7 @@ fun BillsScreen(
                 },
                 name = bill.name,
                 due = bill.due,
-                amount = bill.amount, color = bill.color
+                amount = bill.amount, color = bill.color.toComposeColor()
             )
         }
     )
@@ -45,13 +45,14 @@ fun BillsScreen(
 
 @Composable
 fun SingleBillScreen(
-    billType: String? = UserData.bills.first().name
+    billType: String?,
+    userData: UserData
 ) {
-    val bill = remember(billType) { UserData.getBill(billType) }
+    val bill = remember(billType) { userData.getBill(billType) }
     StatementBody(
         modifier = Modifier.padding(16.dp, 8.dp),
         items = listOf(bill),
-        colors = { bill.color },
+        colors = { bill.color.toComposeColor() },
         amounts = { bill.amount },
         amountsTotal = bill.amount,
         circleLabel = bill.name,
@@ -60,7 +61,7 @@ fun SingleBillScreen(
             name = row.name,
             due = row.due,
             amount = row.amount,
-            color = row.color
+            color = row.color.toComposeColor()
         )
     }
 }
