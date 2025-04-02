@@ -14,7 +14,7 @@ class UserDataClient(
     suspend fun getUserData(): Result<UserData, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "http://192.168.1.221:8080/"
+                urlString = "http://10.0.14.126:8080/"
             )
         } catch (e: SerializationException) {
             return Result.Error(NetworkError.SERIALIZATION)
